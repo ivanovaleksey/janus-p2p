@@ -1,0 +1,4 @@
+[submodule "plugin"]
+	path = plugin
+	url = git@github.com:foxford/janus-p2p-rs.git
+	branch = master

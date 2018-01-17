@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./docker
+    ports:
+      - 8443:443
+    volumes:
+      - ./client:/usr/share/nginx/html
+  plugin:
+    tty: true
+    build:
+      context: ./plugin/docker
+    ports:
+      - 8989:8989
+    volumes:
+      - ./plugin:/opt/sandbox/janus-p2p-rs
+      - cargo:/root/.cargo
+    command:
+      - /bin/bash
+      - -c
+      - |
+          source ~/.profile
+          cd /opt/sandbox/janus-p2p-rs
+          cargo build
+          ln -sf /opt/sandbox/janus-p2p-rs/target/debug/libjanus_p2p.so /opt/janus/lib/janus/plugins/libjanus_p2p.so
+          /opt/janus/bin/janus
+volumes:
+  cargo:
